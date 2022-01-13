@@ -1,20 +1,77 @@
-// binary.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+using namespace std;
+
+template<typename T>
+struct Node
+{
+    T value;
+    Node<T>* next;
+    Node<T>* prev;
+};
+template<typename T>
+class Tree
+{
+    Node<T>* head;
+    Node<T>** tmp;
+    int size;
+    
+public:
+    Tree()
+    {
+        this->head = NULL;
+        this->size = 0;
+    }
+    Node<T>* getHead()
+    {
+        return this->head;
+    }
+    void Add(T value,Node<T>* tmp)
+    {
+        if (tmp == NULL)
+        {
+            tmp = new Node<T>;
+            tmp->value = value;
+            tmp->next = tmp->prev = NULL;
+            return;
+        }
+        if (value > tmp->value)
+        {
+            Add(value, tmp->next);
+        }
+        else
+        {
+            Add(value, tmp->prev);
+        }
+    }
+    void Show(Node<T>* iter, int n)
+    {
+        if (iter == NULL)
+        {
+            return;
+        }
+        else
+        {
+            Show(iter->prev, ++n);
+            for (int i = 0; i < n; i++)
+            {
+                cout << "\t";
+            }
+            cout << iter->value << "\n\n";
+            n--;
+            Show(iter->next, ++n);
+        }
+    }
+};
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    Tree<int> list;
+    list.Add(1, list.getHead());
+    list.Add(11, list.getHead());
+    list.Add(22, list.getHead());
+    list.Add(15, list.getHead());
+    list.Show(list.getHead(), 0);
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
